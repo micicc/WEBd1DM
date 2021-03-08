@@ -18,7 +18,7 @@ public class Student implements Runnable{
     public Student(int id, Long vreme_dolaska, boolean prof, ExecutorService service_PA, Asistent a) {
         this.ime = "Student" + id;
         this.vreme_dolaska = vreme_dolaska;
-        this.vreme_rada = 500 + Math.random() * (500);
+        this.vreme_rada = (500 + Math.random() * (500));
         this.profesor=prof;
         this.service_PA=service_PA;
         this.asistent=a;
@@ -33,17 +33,18 @@ public class Student implements Runnable{
 
             try {
                 Asistent.semaphore.acquire();
-                Asistent.setS(this);
+                Ucionica.getInstance().setStudent_kod_asistenta(this);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+
             }
             Future<Integer> future = service_PA.submit(asistent);
 
             try {
-                System.out.println("ocena: " + future.get());
+                this.ocena=future.get();
                 Asistent.semaphore.release();
+                kraj();
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+
             }
         }else {
 
@@ -52,7 +53,17 @@ public class Student implements Runnable{
 
     }
 
-    public double getVreme_rada() {
+    private void kraj(){
+        String s;
+        if(this.profesor)
+            s="profesor";
+        else
+            s="asistent";
+        System.out.println("Thread: "+this.ime+" Arrival: "+ this.vreme_dolaska+" Prof: "+s
+                +" TTC: " + vreme_rada+":"+Tajmer.pocetak+" Score: "+this.ocena);
+    }
+
+    public synchronized double getVreme_rada() {
         return vreme_rada;
     }
 }

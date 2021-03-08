@@ -6,18 +6,17 @@ import java.util.concurrent.Semaphore;
 public class Asistent implements Callable<Integer> {
 
     public static Semaphore semaphore = new Semaphore(1);
-    public static Student s;
+
 
     public Integer call() throws Exception {
 
-        Thread.sleep((long) s.getVreme_rada());
-        int ocena = (int) ((Math.random()*5)%10+5);
+        Thread.sleep((long) Ucionica.getInstance().getStudent_kod_asistenta().getVreme_rada());
+        int ocena = (int)(Math.random() * 6) + 5;
+        Ucionica.brojOcena.getAndIncrement();
+        Ucionica.zbirOcena.getAndAdd(ocena);
+
         return ocena;
-
-
     }
 
-    public static void setS(Student s) {
-        Asistent.s = s;
-    }
+
 }

@@ -22,6 +22,12 @@ public class Tajmer implements Runnable {
             service_S.shutdownNow();
             service_PA.shutdownNow();
             System.out.println("Kraj odbrane");
+            int brojOcena = Ucionica.brojOcena.get();
+            int zbirOcena = Ucionica.zbirOcena.get();
+            System.out.println("Broj ocena: " + brojOcena);
+            double prosek = zbirOcena * 1.0 / brojOcena;
+            System.out.println("Prosek ocena " + prosek);
+
 
 
         }catch (InterruptedException e){
