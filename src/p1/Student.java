@@ -1,6 +1,6 @@
 package p1;
 
-import java.util.Random;
+import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -10,26 +10,26 @@ public class Student implements Runnable{
     private final String ime;
     private final long vreme_dolaska;
     private final double vreme_rada;
-    private final boolean profesor;
+    private final boolean profesorpregleda;
     private final ExecutorService service_PA;
     private int ocena;
     private final Asistent asistent;
+    private final Profesor profesor;
 
-    public Student(int id, Long vreme_dolaska, boolean prof, ExecutorService service_PA, Asistent a) {
+    public Student(int id, Long vreme_dolaska, boolean prof, ExecutorService service_PA, Asistent a, Profesor p) {
         this.ime = "Student" + id;
         this.vreme_dolaska = vreme_dolaska;
         this.vreme_rada = (500 + Math.random() * (500));
-        this.profesor=prof;
+        this.profesorpregleda =prof;
         this.service_PA=service_PA;
         this.asistent=a;
-
+        this.profesor=p;
     }
-
 
     @Override
     public void run() {
-        System.out.println(ime + " aktivan" + profesor);
-        if(!profesor) {
+        System.out.println(ime + " aktivan" + profesorpregleda);
+        if(!profesorpregleda) {
 
             try {
                 Asistent.semaphore.acquire();
@@ -47,15 +47,33 @@ public class Student implements Runnable{
 
             }
         }else {
+            try {
+                Profesor.semaphore.acquire();
+                Profesor.cyclicBarrier.await();
+                if(Ucionica.getInstance().getStudent_kod_prof_2()==null){
+                    Ucionica.getInstance().setStudent_kod_prof_2(this);
+                }else {
+                    Ucionica.getInstance().setStudent_kod_prof_1(this);
+                }
+                Ucionica.getInstance().setStudent_kod_prof_1(this);
+            } catch (InterruptedException | BrokenBarrierException e) {
 
+            }
+            Future<Integer> future = service_PA.submit(profesor);
+
+            try {
+                this.ocena=future.get();
+                Profesor.semaphore.release();
+                kraj();
+            } catch (InterruptedException | ExecutionException e) {
+
+            }
         }
-
-
     }
 
     private void kraj(){
         String s;
-        if(this.profesor)
+        if(this.profesorpregleda)
             s="profesor";
         else
             s="asistent";

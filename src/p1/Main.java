@@ -16,14 +16,15 @@ public class Main {
         System.out.print( "Unesite broj studenata: " );
         int ukupno_studenata = input.nextInt();
 
-        int sanse_profesor = 0;
+        int sanse_profesor = 50;
 
         ScheduledExecutorService service_S = Executors.newScheduledThreadPool(ukupno_studenata);
 
         ExecutorService service_PA = Executors.newFixedThreadPool(2);
         Asistent asistent = new Asistent();
+        Profesor profesor = new Profesor();
         //service_PA.submit(new Asistent());
-        service_PA.submit(new Profesor());
+        //service_PA.submit(new Profesor());
 
         Thread t_tred = new Thread(new Tajmer(service_S,service_PA));
         t_tred.start();
@@ -31,10 +32,10 @@ public class Main {
         for (int i = 0; i<ukupno_studenata;i++){
             long p = System.currentTimeMillis();
             long t = (long) (Math.random()*1000);
-            boolean profesor = false;
+            boolean profesorPregleda = false;
             if (Math.random()*100 <= sanse_profesor)
-                profesor = true;
-            service_S.schedule(new Student(i,p,profesor,service_PA,asistent), t, TimeUnit.MILLISECONDS);
+                profesorPregleda = true;
+            service_S.schedule(new Student(i,p,profesorPregleda,service_PA,asistent,profesor), t, TimeUnit.MILLISECONDS);
         }
 
         while(true){
