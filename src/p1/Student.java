@@ -28,7 +28,7 @@ public class Student implements Runnable{
 
     @Override
     public void run() {
-        System.out.println(ime + " aktivan" + profesorpregleda);
+        //System.out.println(ime + " aktivan" + profesorpregleda);
         if(!profesorpregleda) {
 
             try {
@@ -47,6 +47,7 @@ public class Student implements Runnable{
 
             }
         }else {
+
             try {
                 Profesor.semaphore.acquire();
                 Profesor.cyclicBarrier.await();

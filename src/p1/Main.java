@@ -34,7 +34,7 @@ public class Main {
             boolean profesorPregleda = false;
             if (Math.random()*100 <= sanse_profesor)
                 profesorPregleda = true;
-            service_S.schedule(new Student(i,p,profesorPregleda,service_PA,asistent,profesor), t, TimeUnit.MILLISECONDS);
+            service_S.schedule(new Student(i,t+p,profesorPregleda,service_PA,asistent,profesor), t, TimeUnit.MILLISECONDS);
         }
 
         while(true){

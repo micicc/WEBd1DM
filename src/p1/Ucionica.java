@@ -12,7 +12,7 @@ public class Ucionica {
     private Student student_kod_prof_1;
     private Student student_kod_prof_2;
 
-    public synchronized static Ucionica getInstance(){
+    public static Ucionica getInstance(){
         if(instance == null){
             instance = new Ucionica();
         }
