@@ -17,7 +17,6 @@ public class Profesor implements Callable<Integer> {
         else
             Thread.sleep((long) Ucionica.getInstance().getStudent_kod_prof_2().getVreme_rada());
 
-        Thread.sleep(500);
         int ocena = (int)(Math.random() * 6) + 5;
         Ucionica.brojOcena.getAndIncrement();
         Ucionica.zbirOcena.getAndAdd(ocena);

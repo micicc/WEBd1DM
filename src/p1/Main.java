@@ -23,8 +23,7 @@ public class Main {
         ExecutorService service_PA = Executors.newFixedThreadPool(2);
         Asistent asistent = new Asistent();
         Profesor profesor = new Profesor();
-        //service_PA.submit(new Asistent());
-        //service_PA.submit(new Profesor());
+
 
         Thread t_tred = new Thread(new Tajmer(service_S,service_PA));
         t_tred.start();
