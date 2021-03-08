@@ -63,6 +63,11 @@ public class Student implements Runnable{
 
             try {
                 this.ocena=future.get();
+                if(Ucionica.getInstance().getStudent_kod_prof_2()==this){
+                    Ucionica.getInstance().setStudent_kod_prof_2(null);
+                }else {
+                    Ucionica.getInstance().setStudent_kod_prof_1(null);
+                }
                 Profesor.semaphore.release();
                 kraj();
             } catch (InterruptedException | ExecutionException e) {
